@@ -1,0 +1,1850 @@
+/* ==========================================================================
+   Wheel of Wild Magic
+   Everything is namespaced under .magic-wheel-app (the window) or .magic-wheel-card (the chat card).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Window chrome
+   -------------------------------------------------------------------------- */
+
+.magic-wheel-app {
+  /* Wheel disc diameter: as big as fits, so the window stays inside a 1366x768 screen. */
+  --mw-size: clamp(260px, calc(100vh - 340px), 400px);
+  --mw-rim: 14px;
+  --mw-W: calc(var(--mw-size) + (2 * var(--mw-rim)));
+  --mw-bg: #08020f;
+  --mw-ink: #f6eeff;
+  --mw-dim: #b9a6d6;
+  --mw-pink: #ff2df7;
+  --mw-hot: #ff2d75;
+  --mw-cyan: #22e6ff;
+  --mw-violet: #7b2ff7;
+  --mw-gold: #ffd166;
+  --mw-font-display: "Bruno Ace", "Signika", sans-serif;
+  --mw-font-label: "Modesto Condensed", "Signika", sans-serif;
+  --mw-font-body: "Signika", sans-serif;
+  background: var(--mw-bg);
+  border: 1px solid rgba(255, 45, 247, 0.55);
+  border-radius: 10px;
+  box-shadow: 0 0 0 1px #000, 0 0 26px rgba(255, 45, 247, 0.4), 0 14px 50px rgba(0, 0, 0, 0.9);
+  color: var(--mw-ink);
+  overflow: hidden;
+}
+
+.magic-wheel-app .window-header {
+  flex: 0 0 30px;
+  background: linear-gradient(90deg, #1b0536 0%, #350c60 50%, #1b0536 100%);
+  border-bottom: 1px solid rgba(255, 45, 247, 0.55);
+  color: #fbe9ff;
+}
+
+.magic-wheel-app .window-header .window-title {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--mw-font-display);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: normal;
+  text-shadow: 0 0 6px rgba(255, 45, 247, 0.8);
+}
+
+.magic-wheel-app .window-header a.header-button {
+  color: #e9d7ff;
+}
+
+.magic-wheel-app .window-header a.header-button:hover {
+  color: #fff;
+  text-shadow: 0 0 6px var(--mw-pink);
+}
+
+.magic-wheel-app .window-content {
+  padding: 0;
+  background: var(--mw-bg);
+  color: var(--mw-ink);
+  overflow: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   Root, tones
+   -------------------------------------------------------------------------- */
+
+.magic-wheel-app .mw-root {
+  --mw-tone: #22e6ff;
+  --mw-tone-rgb: 34, 230, 255;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  isolation: isolate;
+  overflow: hidden;
+  font-family: var(--mw-font-body);
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--mw-ink);
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(123, 47, 247, 0.25), transparent 60%),
+    linear-gradient(180deg, #0c0318 0%, #07020f 100%);
+}
+
+.magic-wheel-app .mw-root.tone-good { --mw-tone: #3dff9a; --mw-tone-rgb: 61, 255, 154; }
+.magic-wheel-app .mw-root.tone-bad { --mw-tone: #ff3b5c; --mw-tone-rgb: 255, 59, 92; }
+.magic-wheel-app .mw-root.tone-weird { --mw-tone: #c77dff; --mw-tone-rgb: 199, 125, 255; }
+.magic-wheel-app .mw-root.tone-chaos { --mw-tone: #ff9f1a; --mw-tone-rgb: 255, 159, 26; }
+
+.magic-wheel-app .mw-root a.inline-roll,
+.magic-wheel-app .mw-root a.content-link {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.magic-wheel-app .mw-root a.inline-roll i,
+.magic-wheel-app .mw-root a.content-link i {
+  color: var(--mw-gold);
+}
+
+/* --------------------------------------------------------------------------
+   Top bar: LIVE badge, contestant, viewers
+   -------------------------------------------------------------------------- */
+
+.magic-wheel-app .mw-topbar {
+  position: relative;
+  z-index: 4;
+  flex: 0 0 48px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  background: linear-gradient(180deg, rgba(34, 8, 62, 0.96), rgba(14, 3, 28, 0.9));
+  border-bottom: 1px solid rgba(34, 230, 255, 0.3);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.6);
+}
+
+.magic-wheel-app .mw-badge {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px 4px 8px;
+  border-radius: 4px;
+  font-family: var(--mw-font-display);
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.magic-wheel-app .mw-badge-live {
+  background: linear-gradient(180deg, #ff2b4f, #c4002a);
+  box-shadow: 0 0 12px rgba(255, 30, 70, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.magic-wheel-app .mw-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 6px #fff;
+  animation: mw-blink 1.1s steps(1) infinite;
+}
+
+.magic-wheel-app .mw-badge-rerun {
+  background: linear-gradient(180deg, #ffc23d, #b36b00);
+  color: #1d0b00;
+  box-shadow: 0 0 12px rgba(255, 176, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.magic-wheel-app .mw-contestant {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+}
+
+/* Long table names end in an ellipsis. The padding, cancelled out by the margin, keeps the glow from being clipped. */
+.magic-wheel-app .mw-kicker {
+  max-width: calc(100% + 16px);
+  margin: -6px -8px;
+  padding: 6px 8px;
+  font-family: var(--mw-font-display);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mw-cyan);
+  text-shadow: 0 0 8px rgba(34, 230, 255, 0.7);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.magic-wheel-app .mw-contestant-name {
+  max-width: 100%;
+  font-family: var(--mw-font-label);
+  font-size: 19px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #e9d7ff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.magic-wheel-app .mw-contestant-name strong {
+  color: #fff;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(255, 45, 247, 0.9);
+}
+
+.magic-wheel-app .mw-viewers {
+  flex: none;
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  font-family: var(--mw-font-display);
+  font-size: 12px;
+  color: #fff;
+}
+
+.magic-wheel-app .mw-viewers i {
+  color: var(--mw-hot);
+  filter: drop-shadow(0 0 4px var(--mw-hot));
+}
+
+.magic-wheel-app .mw-viewer-count {
+  display: inline-block;
+  min-width: 78px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.magic-wheel-app .mw-viewer-count.is-spiking {
+  animation: mw-spike 0.8s ease-out;
+}
+
+.magic-wheel-app .mw-viewers-label {
+  font-family: var(--mw-font-body);
+  font-size: 10px;
+  color: var(--mw-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* --------------------------------------------------------------------------
+   Stage and backdrop
+   -------------------------------------------------------------------------- */
+
+.magic-wheel-app .mw-stage {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  height: calc(var(--mw-W) + 24px);
+  overflow: hidden;
+}
+
+.magic-wheel-app .mw-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.magic-wheel-app .mw-rays {
+  position: absolute;
+  left: 50%;
+  top: calc(14px + (var(--mw-W) / 2));
+  width: 1200px;
+  height: 1200px;
+  margin: -600px 0 0 -600px;
+  background: repeating-conic-gradient(from 0deg,
+    rgba(255, 45, 247, 0.14) 0deg 5deg, transparent 5deg 15deg,
+    rgba(34, 230, 255, 0.1) 15deg 20deg, transparent 20deg 30deg);
+  -webkit-mask-image: radial-gradient(circle, #000 18%, transparent 50%);
+  mask-image: radial-gradient(circle, #000 18%, transparent 50%);
+  animation: mw-turn 90s linear infinite;
+}
+
+.magic-wheel-app .mw-floor {
+  position: absolute;
+  left: -30%;
+  right: -30%;
+  bottom: -2px;
+  height: 44%;
+  background-image:
+    linear-gradient(rgba(255, 45, 247, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 45, 247, 0.5) 1px, transparent 1px);
+  background-size: 40px 26px;
+  transform: perspective(260px) rotateX(58deg);
+  transform-origin: 50% 100%;
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent 85%);
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent 85%);
+  opacity: 0.5;
+}
+
+/* --------------------------------------------------------------------------
+   The wheel
+   -------------------------------------------------------------------------- */
+
+.magic-wheel-app .mw-wheel {
+  position: absolute;
+  left: 50%;
+  top: 14px;
+  z-index: 2;
+  width: var(--mw-W);
+  height: var(--mw-W);
+  margin-left: calc(var(--mw-W) / -2);
+  transform-origin: 50% 50%;
+  transition: transform 0.85s cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+
+.magic-wheel-app .mw-wheel-body {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  transition: filter 1s ease;
+}
+
+.magic-wheel-app .mw-rim-glow {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  box-shadow: 0 0 26px 6px rgba(255, 45, 247, 0.55), 0 0 70px 16px rgba(123, 47, 247, 0.35);
+  animation: mw-glow 2.4s ease-in-out infinite;
+}
+
+.magic-wheel-app .mw-rim {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 200deg, #ff2df7, #7b2ff7 18%, #22e6ff 34%, #7b2ff7 50%, #ff2df7 66%, #ffd166 83%, #ff2df7);
+  box-shadow: 0 0 0 2px #10021d, 0 6px 18px rgba(0, 0, 0, 0.8);
+}
+
+.magic-wheel-app .mw-rim::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #16052a 60%, #2a0b48 100%);
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.9), inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+/* Marquee bulbs sitting in the rim channel; ::after is the lit filament. */
+.magic-wheel-app .mw-bulbs {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.magic-wheel-app .mw-bulb {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #9a7440, #4a2c08 70%);
+  transform: rotate(var(--a)) translateY(calc((var(--mw-W) / -2) + (var(--mw-rim) / 2) + 1.5px));
+}
+
+.magic-wheel-app .mw-bulb::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 42% 42%, #fffdf0 0 22%, #ffd36b 42%, rgba(255, 170, 40, 0.5) 62%, transparent 72%);
+  opacity: 0.1;
+  animation: mw-chase var(--mw-chase, 1.2s) linear infinite;
+  animation-delay: calc(var(--k) * var(--mw-chase, 1.2s) / -3);
+}
+
+.magic-wheel-app .mw-root.is-spinning { --mw-chase: 0.42s; }
+.magic-wheel-app .mw-root.is-slowing { --mw-chase: 0.75s; }
+
+.magic-wheel-app .mw-root.is-decoy .mw-bulb::after,
+.magic-wheel-app .mw-root.is-celebrating .mw-bulb::after {
+  animation: mw-flash 0.36s steps(1) infinite;
+}
+
+.magic-wheel-app .mw-root.is-fakeout .mw-bulb::after {
+  background: radial-gradient(circle at 42% 42%, #fff0f0 0 22%, #ff4d6d 42%, rgba(255, 30, 60, 0.5) 62%, transparent 72%);
+  animation: mw-flash 0.2s steps(1) infinite;
+}
+
+/* The disc: a pre-painted canvas, rotated with a CSS transform. */
+.magic-wheel-app .mw-disc {
+  position: absolute;
+  inset: var(--mw-rim);
+  z-index: 2;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #0b0116, 0 0 16px rgba(0, 0, 0, 0.8);
+}
+
+.magic-wheel-app .mw-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* Static gloss: the wheel turns under the studio lights. */
+.magic-wheel-app .mw-disc::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 45% at 35% 18%, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0) 70%),
+    radial-gradient(circle at 50% 50%, transparent 64%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+.magic-wheel-app .mw-spotlight {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  background: conic-gradient(from var(--mw-spot-from, 0deg),
+    rgba(255, 255, 255, 0.16) 0deg var(--mw-spot-width, 0deg),
+    rgba(6, 0, 14, 0.64) var(--mw-spot-width, 0deg) 360deg);
+}
+
+.magic-wheel-app .mw-root.is-landed .mw-spotlight {
+  opacity: 1;
+}
+
+/* Hub: the System's eye. It does not turn; the riveted ring painted on the canvas does. */
+.magic-wheel-app .mw-hub {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  width: calc(var(--mw-size) * 0.17);
+  height: calc(var(--mw-size) * 0.17);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #0d0219;
+  box-shadow: 0 0 0 2px var(--mw-gold), 0 0 14px rgba(255, 45, 117, 0.8), 0 0 30px rgba(255, 45, 247, 0.45), inset 0 0 8px #000;
+  transition: box-shadow 0.5s ease;
+}
+
+.magic-wheel-app .mw-root.is-landed .mw-hub {
+  box-shadow: 0 0 0 2px var(--mw-gold), 0 0 18px rgba(var(--mw-tone-rgb), 0.9), 0 0 40px rgba(var(--mw-tone-rgb), 0.5), inset 0 0 8px #000;
+}
+
+.magic-wheel-app .mw-eye {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.magic-wheel-app .mw-eye-white {
+  fill: #2a0018;
+}
+
+.magic-wheel-app .mw-eye-outline {
+  fill: none;
+  stroke: #ff2d75;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.magic-wheel-app .mw-iris {
+  filter: drop-shadow(0 0 4px #ff2d75);
+}
+
+.magic-wheel-app .mw-pupil {
+  fill: #0a0005;
+}
+
+.magic-wheel-app .mw-glint {
+  fill: rgba(255, 255, 255, 0.85);
+}
+
+.magic-wheel-app .mw-eye-ball {
+  transform-origin: 50px 50px;
+  animation: mw-eye-blink 4.6s ease-in-out infinite;
+}
+
+.magic-wheel-app .mw-eye-look {
+  transform-origin: 50px 50px;
+  transition: transform 0.4s ease;
+  animation: mw-eye-look 6s ease-in-out infinite;
+}
+
+.magic-wheel-app .mw-root.is-spinning .mw-eye-look {
+  animation: mw-eye-dizzy 0.8s linear infinite;
+}
+
+.magic-wheel-app .mw-root.is-slowing .mw-eye-look,
+.magic-wheel-app .mw-root.is-decoy .mw-eye-look,
+.magic-wheel-app .mw-root.is-fakeout .mw-eye-look {
+  animation: none;
+  transform: translate(0, -9px);
+}
+
+.magic-wheel-app .mw-root.is-fakeout .mw-eye-ball {
+  animation: mw-eye-squint 0.5s ease-in-out 2;
+}
+
+.magic-wheel-app .mw-root.is-landed .mw-eye-look {
+  animation: mw-eye-stare 3s ease-in-out infinite;
+}
+
+/* Pointer / flapper. JS sets its rotation each frame. */
+.magic-wheel-app .mw-pointer {
+  position: absolute;
+  left: 50%;
+  top: -12px;
+  z-index: 4;
+  width: 34px;
+  height: 50px;
+  margin-left: -17px;
+  transform-origin: 17px 12px;
+  will-change: transform;
+  filter: drop-shadow(0 0 5px rgba(255, 45, 117, 0.9)) drop-shadow(0 3px 2px rgba(0, 0, 0, 0.7));
+}
+
+.magic-wheel-app .mw-pointer svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.magic-wheel-app .mw-pointer-body {
+  stroke: #2a0010;
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}
+
+.magic-wheel-app .mw-pointer-shine {
+  fill: rgba(255, 255, 255, 0.45);
+}
+
+.magic-wheel-app .mw-pointer-pivot {
+  fill: var(--mw-gold);
+  stroke: #6b4400;
+  stroke-width: 1.5;
+}
+
+.magic-wheel-app .mw-pointer-gem {
+  fill: var(--mw-cyan);
+}
+
+.magic-wheel-app .mw-root.is-landed .mw-pointer-gem {
+  fill: var(--mw-tone);
+}
+
+/* Docked: the wheel shrinks into the top-left corner to make room for the reveal. */
+.magic-wheel-app .mw-root.is-revealed .mw-wheel {
+  transform: translate(var(--mw-dock-x, 0px), var(--mw-dock-y, 0px)) scale(var(--mw-dock-scale, 0.5));
+}
+
+.magic-wheel-app .mw-root.is-celebrating .mw-rim-glow {
+  animation: mw-glow 0.4s ease-in-out infinite;
+}
+
+.magic-wheel-app .mw-root.is-fakeout .mw-rim-glow {
+  box-shadow: 0 0 26px 6px rgba(255, 40, 70, 0.7), 0 0 70px 16px rgba(255, 0, 40, 0.35);
+}
+
+.magic-wheel-app .mw-root.is-revealed .mw-rim-glow {
+  box-shadow: 0 0 26px 6px rgba(var(--mw-tone-rgb), 0.55), 0 0 70px 16px rgba(var(--mw-tone-rgb), 0.3);
+}
+
+/* --------------------------------------------------------------------------
+   Under the docked wheel: range plate and audience reactions
+   -------------------------------------------------------------------------- */
+
+/* The plate, with the reactions filling the column below it however tall the plate gets. */
+.magic-wheel-app .mw-dock-stack {
+  position: absolute;
+  left: 6px;
+  top: calc((var(--mw-W) * 0.5) + 26px);
+  bottom: 0;
+  z-index: 3;
+  width: calc((var(--mw-W) * 0.5) + 12px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  pointer-events: none;
+}
+
+.magic-wheel-app .mw-plate {
+  flex: none;
+  width: calc(var(--mw-W) * 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.4s ease 0.35s, transform 0.5s cubic-bezier(0.2, 0.9, 0.25, 1) 0.35s;
+  pointer-events: none;
+}
+
+.magic-wheel-app .mw-root.is-revealed .mw-plate {
+  opacity: 1;
+  transform: none;
+}
+
+.magic-wheel-app .mw-plate-range {
+  padding: 3px 16px 2px;
+  border-radius: 8px;
+  border: 2px solid var(--mw-tone);
+  background: linear-gradient(180deg, #1d0638, #0c0218);
+  box-shadow: 0 0 14px rgba(var(--mw-tone-rgb), 0.55), inset 0 0 10px rgba(var(--mw-tone-rgb), 0.25);
+  font-family: var(--mw-font-display);
+  /* Shrinks with a small wheel so "99-00" stays on one line. */
+  font-size: min(26px, calc(var(--mw-W) * 0.08));
+  line-height: 1.1;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(var(--mw-tone-rgb), 0.9);
+}
+
+.magic-wheel-app .mw-plate-verdict {
+  max-width: 100%;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--mw-tone-rgb), 0.45);
+  background: rgba(var(--mw-tone-rgb), 0.12);
+  font-family: var(--mw-font-display);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--mw-tone);
+}
+
+.magic-wheel-app .mw-reactions {
+  position: relative;
+  flex: 1 1 auto;
+  align-self: stretch;
+  min-height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to top, #000 65%, transparent);
+  mask-image: linear-gradient(to top, #000 65%, transparent);
+}
+
+.magic-wheel-app .mw-reaction {
+  position: absolute;
+  left: var(--x, 0px);
+  bottom: 6px;
+  max-width: calc(100% - var(--x, 0px));
+  padding: 4px 9px;
+  border-radius: 10px 10px 10px 2px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(22, 6, 44, 0.92);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  font-size: 11.5px;
+  line-height: 1.25;
+  color: #fff;
+  /* Wrap rather than cut off the punchline. */
+  white-space: normal;
+  overflow-wrap: anywhere;
+  animation: mw-react 4.8s ease-out forwards;
+}
+
+.magic-wheel-app .mw-reaction-user {
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   Reveal panel
+   -------------------------------------------------------------------------- */
+
+.magic-wheel-app .mw-reveal {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  right: 12px;
+  left: calc((var(--mw-W) * 0.5) + 28px);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 13px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 1px solid rgba(var(--mw-tone-rgb), 0.6);
+  border-radius: 12px;
+  background: linear-gradient(160deg, rgba(30, 8, 58, 0.95), rgba(10, 3, 22, 0.95));
+  box-shadow: 0 0 22px rgba(var(--mw-tone-rgb), 0.3), inset 0 0 24px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transform: translateX(40px) scale(0.97);
+  transition: opacity 0.45s ease 0.2s, transform 0.65s cubic-bezier(0.2, 0.9, 0.25, 1) 0.2s;
+  pointer-events: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--mw-tone-rgb), 0.6) transparent;
+}
+
+.magic-wheel-app .mw-root.is-revealed .mw-reveal {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.magic-wheel-app .mw-reveal,
+.magic-wheel-app .mw-reveal * {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.magic-wheel-app .mw-reveal::-webkit-scrollbar-track {
+  box-shadow: none;
+}
+
+.magic-wheel-app .mw-reveal::-webkit-scrollbar-thumb {
+  border: none;
+  background: rgba(var(--mw-tone-rgb), 0.6);
+}
+
+.magic-wheel-app .mw-reveal > * {
+  flex: none;
+}
+
+/* Centre short reveals vertically; auto margins collapse to 0 once the panel has to scroll. */
+.magic-wheel-app .mw-reveal > :first-child {
+  margin-top: auto;
+}
+
+.magic-wheel-app .mw-reveal > :last-child {
+  margin-bottom: auto;
+}
+
+.magic-wheel-app .mw-reveal-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.magic-wheel-app .mw-reveal-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid var(--mw-tone);
+  background: radial-gradient(circle at 35% 30%, rgba(var(--mw-tone-rgb), 0.35), rgba(0, 0, 0, 0.5));
+  box-shadow: 0 0 14px rgba(var(--mw-tone-rgb), 0.6);
+  font-size: 21px;
+  color: var(--mw-tone);
+  text-shadow: 0 0 10px rgba(var(--mw-tone-rgb), 0.9);
+}
+
+.magic-wheel-app .mw-reveal-titles {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.magic-wheel-app .mw-reveal-kicker {
+  font-family: var(--mw-font-display);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mw-dim);
+}
+
+.magic-wheel-app .mw-reveal-label {
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-family: var(--mw-font-label);
+  font-weight: 700;
+  font-size: 31px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--mw-tone);
+  text-shadow: 0 0 12px rgba(var(--mw-tone-rgb), 0.75), 0 2px 0 rgba(0, 0, 0, 0.6);
+  overflow-wrap: anywhere;
+}
+
+.magic-wheel-app .mw-root.is-revealed .mw-reveal-label {
+  animation: mw-pop 0.6s cubic-bezier(0.2, 1.6, 0.4, 1) 0.35s both;
+}
+
+.magic-wheel-app .mw-effect {
+  padding: 7px 10px;
+  border-left: 3px solid var(--mw-tone);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 13.5px;
+  line-height: 1.42;
+  color: #efe4ff;
+}
+
+.magic-wheel-app .mw-effect p,
+.magic-wheel-app .mw-extra p,
+.magic-wheel-app .mw-line p {
+  margin: 0 0 0.4em;
+}
+
+.magic-wheel-app .mw-effect p:last-child,
+.magic-wheel-app .mw-extra p:last-child,
+.magic-wheel-app .mw-line p:last-child {
+  margin-bottom: 0;
+}
+
+.magic-wheel-app .mw-extra {
+  padding: 6px 9px;
+  border: 1px dashed rgba(34, 230, 255, 0.45);
+  border-radius: 6px;
+  background: rgba(34, 230, 255, 0.08);
+  font-size: 13px;
+  color: #dff9ff;
+}
+
+.magic-wheel-app .mw-extra > i {
+  margin-right: 3px;
+  color: var(--mw-cyan);
+}
+
+.magic-wheel-app .mw-line {
+  margin: 0;
+  padding: 8px 11px 9px;
+  border: 1px solid rgba(255, 45, 247, 0.45);
+  border-radius: 12px 12px 12px 3px;
+  background: linear-gradient(135deg, rgba(255, 45, 247, 0.17), rgba(123, 47, 247, 0.12));
+  box-shadow: 0 0 12px rgba(255, 45, 247, 0.15);
+  font-style: normal;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #fff;
+}
+
+.magic-wheel-app .mw-line em {
+  font-style: italic;
+}
+
+.magic-wheel-app .mw-line strong {
+  color: #ffe36e;
+}
+
+.magic-wheel-app .mw-line-speaker {
+  display: block;
+  margin-bottom: 3px;
+  font-family: var(--mw-font-display);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mw-pink);
+  text-shadow: 0 0 6px rgba(255, 45, 247, 0.8);
+}
+
+.magic-wheel-app .mw-aside {
+  margin: 0;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--mw-dim);
+}
+
+.magic-wheel-app .mw-aside > i {
+  margin-right: 3px;
+  font-style: normal;
+  color: var(--mw-gold);
+}
+
+/* Reward boxes, by tier. */
+.magic-wheel-app .mw-box,
+.magic-wheel-card .mwc-box {
+  --tier: #e0904a;
+  --tier-rgb: 224, 144, 74;
+}
+
+.magic-wheel-app .mw-box.tier-silver,
+.magic-wheel-card .mwc-box.tier-silver { --tier: #dfe7f0; --tier-rgb: 223, 231, 240; }
+.magic-wheel-app .mw-box.tier-gold,
+.magic-wheel-card .mwc-box.tier-gold { --tier: #ffd34d; --tier-rgb: 255, 211, 77; }
+.magic-wheel-app .mw-box.tier-platinum,
+.magic-wheel-card .mwc-box.tier-platinum { --tier: #b8f3ff; --tier-rgb: 184, 243, 255; }
+.magic-wheel-app .mw-box.tier-legendary,
+.magic-wheel-card .mwc-box.tier-legendary { --tier: #ff9d2e; --tier-rgb: 255, 157, 46; }
+
+.magic-wheel-app .mw-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  overflow: hidden;
+  border: 1px solid rgba(var(--tier-rgb), 0.8);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(var(--tier-rgb), 0.22), rgba(0, 0, 0, 0.35));
+  box-shadow: 0 0 12px rgba(var(--tier-rgb), 0.3);
+}
+
+.magic-wheel-app .mw-box.tier-legendary {
+  box-shadow: 0 0 16px rgba(255, 157, 46, 0.55), 0 0 4px rgba(255, 45, 247, 0.6) inset;
+}
+
+.magic-wheel-app .mw-box-icon {
+  flex: none;
+  font-size: 26px;
+  color: var(--tier);
+  filter: drop-shadow(0 0 6px rgba(var(--tier-rgb), 0.8));
+}
+
+.magic-wheel-app .mw-root.is-revealed .mw-box-icon {
+  animation: mw-loot 1.6s ease-in-out 0.9s 2;
+}
+
+.magic-wheel-app .mw-box-body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.magic-wheel-app .mw-box-title {
+  font-family: var(--mw-font-display);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tier);
+}
+
+.magic-wheel-app .mw-box-contents {
+  font-size: 13px;
+  color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+   Ticker
+   -------------------------------------------------------------------------- */
+
+.magic-wheel-app .mw-ticker {
+  position: relative;
+  z-index: 4;
+  flex: 0 0 70px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 12px 8px;
+  border-top: 1px solid rgba(34, 230, 255, 0.4);
+  border-bottom: 1px solid rgba(255, 45, 247, 0.3);
+  background: linear-gradient(90deg, #14031f, #1f0838 50%, #14031f);
+  box-shadow: inset 0 8px 14px -10px rgba(34, 230, 255, 0.4);
+}
+
+.magic-wheel-app .mw-ticker-tag {
+  flex: none;
+  margin-top: 1px;
+  padding: 3px 7px;
+  border-radius: 3px;
+  background: var(--mw-cyan);
+  box-shadow: 0 0 10px rgba(34, 230, 255, 0.6);
+  font-family: var(--mw-font-display);
+  font-size: 9.5px;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #120020;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.magic-wheel-app .mw-root.is-fakeout .mw-ticker-tag {
+  background: #ff3b5c;
+  box-shadow: 0 0 12px rgba(255, 59, 92, 0.8);
+}
+
+.magic-wheel-app .mw-ticker-text {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  font-size: 13.5px;
+  line-height: 1.36;
+  color: #f3eaff;
+  text-shadow: 0 0 8px rgba(123, 47, 247, 0.6);
+}
+
+.magic-wheel-app .mw-ticker-text strong {
+  color: #ffe36e;
+}
+
+.magic-wheel-app .mw-ticker-text em {
+  color: #9ff3ff;
+}
+
+.magic-wheel-app .mw-ticker-text::after {
+  content: "\258C";
+  margin-left: 1px;
+  color: var(--mw-cyan);
+  animation: mw-blink 0.9s steps(1) infinite;
+}
+
+/* --------------------------------------------------------------------------
+   Achievement toast
+   -------------------------------------------------------------------------- */
+
+.magic-wheel-app .mw-toast {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 58px;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 66px;
+  padding: 8px 14px;
+  overflow: hidden;
+  border: 1px solid var(--mw-gold);
+  border-radius: 10px;
+  background: linear-gradient(100deg, #2a1500, #4d2c00 45%, #2a1500);
+  box-shadow: 0 0 18px rgba(255, 209, 102, 0.55), 0 8px 24px rgba(0, 0, 0, 0.8);
+  color: #fff3d6;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(26px) scale(0.94);
+  transition: opacity 0.35s ease, transform 0.5s cubic-bezier(0.2, 1.4, 0.4, 1);
+  pointer-events: none;
+}
+
+.magic-wheel-app .mw-root.show-toast .mw-toast {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.magic-wheel-app .mw-root.show-toast.hide-toast .mw-toast {
+  opacity: 0;
+  transform: translateY(26px) scale(0.94);
+  pointer-events: none;
+}
+
+/* Keep the reveal and reactions clear of the toast while it is up. */
+.magic-wheel-app .mw-root.show-toast:not(.hide-toast) .mw-reveal {
+  bottom: calc(10px + var(--mw-toast-clear, 0px));
+}
+
+.magic-wheel-app .mw-root.show-toast:not(.hide-toast) .mw-dock-stack {
+  bottom: var(--mw-toast-clear, 0px);
+}
+
+.magic-wheel-app .mw-toast::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -90px;
+  width: 60px;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg);
+}
+
+.magic-wheel-app .mw-root.show-toast .mw-toast::before {
+  animation: mw-shine 1.2s ease-out 0.4s;
+}
+
+.magic-wheel-app .mw-toast-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff1b8, #ffb000 55%, #8a4b00);
+  box-shadow: 0 0 14px rgba(255, 209, 102, 0.8);
+  font-size: 20px;
+  color: #4a2400;
+}
+
+.magic-wheel-app .mw-toast-body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.magic-wheel-app .mw-toast-kicker {
+  font-family: var(--mw-font-display);
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mw-gold);
+}
+
+.magic-wheel-app .mw-toast-title {
+  font-family: var(--mw-font-label);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255, 209, 102, 0.8);
+}
+
+.magic-wheel-app .mw-toast-text {
+  font-size: 12px;
+  color: #ffe9bf;
+}
+
+/* --------------------------------------------------------------------------
+   Footer: sponsor and the close button
+   -------------------------------------------------------------------------- */
+
+.magic-wheel-app .mw-footer {
+  position: relative;
+  z-index: 5;
+  flex: 0 0 52px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+  background: linear-gradient(180deg, #12031f, #0a0214);
+}
+
+.magic-wheel-app .mw-sponsor {
+  flex: 1;
+  min-width: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 11px;
+  font-style: italic;
+  line-height: 1.3;
+  color: var(--mw-dim);
+}
+
+.magic-wheel-app .mw-sponsor > i {
+  margin-right: 3px;
+  font-style: normal;
+  color: var(--mw-gold);
+}
+
+.magic-wheel-app .mw-sponsor strong {
+  color: #fff;
+}
+
+.magic-wheel-app button.mw-close {
+  flex: none;
+  width: auto;
+  min-width: 150px;
+  max-width: 280px;
+  height: 34px;
+  margin: 0;
+  padding: 0 16px;
+  overflow: hidden;
+  border: none;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #ff4fd8, #b0179a 55%, #7b0f6b);
+  box-shadow: 0 0 14px rgba(255, 45, 247, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+  font-family: var(--mw-font-display);
+  font-size: 11.5px;
+  line-height: 34px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.magic-wheel-app button.mw-close:hover,
+.magic-wheel-app button.mw-close:focus-visible {
+  outline: none;
+  transform: translateY(-1px);
+  filter: brightness(1.12);
+  box-shadow: 0 0 24px rgba(255, 45, 247, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+}
+
+.magic-wheel-app button.mw-close:active {
+  transform: translateY(1px);
+}
+
+.magic-wheel-app .mw-root.is-revealed button.mw-close {
+  animation: mw-beckon 1.8s ease-in-out 1.4s infinite;
+}
+
+.magic-wheel-app .mw-countdown {
+  opacity: 0.8;
+}
+
+/* --------------------------------------------------------------------------
+   Effects by tone
+   -------------------------------------------------------------------------- */
+
+.magic-wheel-app .mw-fx {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.magic-wheel-app .mw-confetti {
+  position: absolute;
+  top: -18px;
+  left: var(--x);
+  width: var(--w);
+  height: var(--h);
+  border-radius: 2px;
+  background: var(--c);
+  opacity: 0;
+  animation: mw-confetti var(--dur) cubic-bezier(0.3, 0.55, 0.45, 1) var(--delay) forwards;
+}
+
+.magic-wheel-app .mw-glyph {
+  position: absolute;
+  bottom: -40px;
+  left: var(--x);
+  font-family: var(--mw-font-display);
+  font-size: var(--s);
+  font-style: normal;
+  color: hsl(var(--hue) 95% 72%);
+  text-shadow: 0 0 10px currentColor;
+  opacity: 0;
+  animation: mw-glyph var(--dur) ease-in-out var(--delay) forwards;
+}
+
+.magic-wheel-app .mw-drop {
+  position: absolute;
+  top: -20px;
+  left: var(--x);
+  width: 2px;
+  height: 14px;
+  border-radius: 2px;
+  background: linear-gradient(to bottom, transparent, rgba(140, 190, 255, 0.85));
+  opacity: 0;
+  animation: mw-drop var(--dur) linear var(--delay) 3;
+}
+
+.magic-wheel-app .mw-alarm {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(255, 30, 30, 0.45) 100%);
+  opacity: 0;
+  animation: mw-alarm 0.9s ease-in-out 4;
+}
+
+.magic-wheel-app .mw-root.fx-good .mw-reveal-label {
+  text-shadow: 0 0 14px rgba(var(--mw-tone-rgb), 0.9), 0 0 2px #fff, 0 2px 0 rgba(0, 0, 0, 0.6);
+}
+
+.magic-wheel-app .mw-root.fx-bad .mw-wheel-body {
+  filter: grayscale(0.85) brightness(0.75);
+  animation: mw-sag 2.2s ease-in-out 0.3s 2;
+}
+
+.magic-wheel-app .mw-root.fx-bad.is-revealed .mw-reveal-label {
+  animation: mw-pop 0.6s cubic-bezier(0.2, 1.6, 0.4, 1) 0.35s both, mw-droop 1.4s ease-in-out 1.1s forwards;
+}
+
+.magic-wheel-app .mw-root.fx-weird .mw-canvas {
+  animation: mw-hue 2.6s linear 2;
+}
+
+.magic-wheel-app .mw-root.fx-weird .mw-wheel-body {
+  animation: mw-wobble 1.8s ease-in-out 0.3s 2;
+}
+
+.magic-wheel-app .mw-root.fx-chaos {
+  animation: mw-shake 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97) 0.05s 2;
+}
+
+.magic-wheel-app .mw-root.fx-chaos .mw-rim-glow {
+  animation: mw-glow 0.3s ease-in-out 8;
+}
+
+/* --------------------------------------------------------------------------
+   Keyframes
+   -------------------------------------------------------------------------- */
+
+@keyframes mw-blink { 50% { opacity: 0; } }
+@keyframes mw-turn { to { transform: rotate(360deg); } }
+@keyframes mw-glow { 0%, 100% { opacity: 0.75; } 50% { opacity: 1; } }
+@keyframes mw-chase { 0%, 30% { opacity: 1; } 34%, 100% { opacity: 0.1; } }
+@keyframes mw-flash { 0% { opacity: 1; } 50% { opacity: 0.1; } }
+
+@keyframes mw-spike {
+  0% { color: #fff; transform: scale(1); }
+  30% { color: var(--mw-tone); transform: scale(1.25); text-shadow: 0 0 12px var(--mw-tone); }
+  100% { color: #fff; transform: scale(1); }
+}
+
+@keyframes mw-eye-blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.08); }
+}
+
+@keyframes mw-eye-squint {
+  50% { transform: scaleY(0.35); }
+}
+
+@keyframes mw-eye-look {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-9px, 2px); }
+  40% { transform: translate(-9px, 2px); }
+  55% { transform: translate(8px, -3px); }
+  75% { transform: translate(8px, -3px); }
+  88% { transform: translate(0, 5px); }
+}
+
+@keyframes mw-eye-dizzy {
+  from { transform: rotate(0deg) translateX(7px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(7px) rotate(-360deg); }
+}
+
+@keyframes mw-eye-stare {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+@keyframes mw-react {
+  0% { opacity: 0; transform: translateY(16px) scale(0.9); }
+  10% { opacity: 1; transform: none; }
+  75% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-125px); }
+}
+
+@keyframes mw-react-fade {
+  0% { opacity: 0; }
+  10%, 75% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes mw-pop {
+  0% { opacity: 0; transform: scale(0.6); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes mw-droop {
+  0% { transform: rotate(0deg); }
+  60% { transform: rotate(3deg) translateY(3px); }
+  100% { transform: rotate(2deg) translateY(2px); }
+}
+
+@keyframes mw-loot {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  15% { transform: rotate(-12deg) scale(1.1); }
+  30% { transform: rotate(10deg) scale(1.1); }
+  45% { transform: rotate(-8deg) scale(1.05); }
+  60% { transform: rotate(0deg) scale(1.15); }
+}
+
+@keyframes mw-shine { to { left: 110%; } }
+
+@keyframes mw-beckon {
+  0%, 100% { box-shadow: 0 0 14px rgba(255, 45, 247, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -2px 0 rgba(0, 0, 0, 0.3); }
+  50% { box-shadow: 0 0 26px rgba(255, 45, 247, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -2px 0 rgba(0, 0, 0, 0.3); }
+}
+
+@keyframes mw-confetti {
+  0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg); }
+  85% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(var(--dx), 700px, 0) rotate(var(--rot)); }
+}
+
+@keyframes mw-glyph {
+  0% { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+  15% { opacity: 1; }
+  50% { transform: translate(18px, -260px) rotate(20deg); }
+  100% { opacity: 0; transform: translate(-14px, -560px) rotate(-25deg); }
+}
+
+@keyframes mw-drop {
+  0% { opacity: 0; transform: translateY(0); }
+  10% { opacity: 0.9; }
+  100% { opacity: 0.2; transform: translateY(680px); }
+}
+
+@keyframes mw-alarm { 50% { opacity: 1; } }
+
+@keyframes mw-sag {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg) translateY(4px); }
+  60% { transform: rotate(4deg) translateY(2px); }
+}
+
+@keyframes mw-hue {
+  from { filter: hue-rotate(0deg); }
+  to { filter: hue-rotate(360deg); }
+}
+
+@keyframes mw-wobble {
+  0%, 100% { transform: none; }
+  20% { transform: skew(5deg, -2deg) scale(1.03, 0.97); }
+  40% { transform: skew(-4deg, 2deg) scale(0.97, 1.03); }
+  60% { transform: skew(3deg, -1deg) scale(1.02, 0.98); }
+  80% { transform: skew(-2deg, 1deg); }
+}
+
+@keyframes mw-shake {
+  10%, 90% { transform: translate3d(-2px, 1px, 0); }
+  20%, 80% { transform: translate3d(4px, -2px, 0); }
+  30%, 50%, 70% { transform: translate3d(-7px, 3px, 0) rotate(-0.4deg); }
+  40%, 60% { transform: translate3d(7px, -2px, 0) rotate(0.4deg); }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion: keep the spin (it is the content), drop the decoration.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .magic-wheel-app .mw-rays,
+  .magic-wheel-app .mw-rim-glow,
+  .magic-wheel-app .mw-live-dot,
+  .magic-wheel-app .mw-eye-ball,
+  .magic-wheel-app .mw-eye-look,
+  .magic-wheel-app .mw-reveal-label,
+  .magic-wheel-app .mw-box-icon,
+  .magic-wheel-app .mw-viewer-count,
+  .magic-wheel-app button.mw-close,
+  .magic-wheel-app .mw-toast::before,
+  .magic-wheel-app .mw-ticker-text::after,
+  .magic-wheel-app .mw-root.fx-chaos,
+  .magic-wheel-app .mw-root .mw-wheel-body,
+  .magic-wheel-app .mw-root .mw-canvas {
+    animation: none !important;
+  }
+
+  .magic-wheel-app .mw-bulb::after {
+    animation: none !important;
+    opacity: 0.7;
+  }
+
+  .magic-wheel-app .mw-wheel,
+  .magic-wheel-app .mw-reveal,
+  .magic-wheel-app .mw-plate,
+  .magic-wheel-app .mw-toast {
+    transition: opacity 0.3s ease !important;
+  }
+
+  .magic-wheel-app .mw-reaction {
+    animation-name: mw-react-fade;
+  }
+
+  .magic-wheel-app .mw-fx {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Chat card
+   ========================================================================== */
+
+.magic-wheel-card {
+  --mwc-tone: #22e6ff;
+  --mwc-tone-rgb: 34, 230, 255;
+  position: relative;
+  overflow: hidden;
+  margin: 2px 0 0;
+  padding: 9px 10px 8px;
+  border: 1px solid rgba(var(--mwc-tone-rgb), 0.65);
+  border-radius: 9px;
+  background:
+    radial-gradient(130% 70% at 0% 0%, rgba(123, 47, 247, 0.5), transparent 55%),
+    radial-gradient(120% 80% at 100% 100%, rgba(var(--mwc-tone-rgb), 0.16), transparent 60%),
+    linear-gradient(180deg, #170530, #0a0216);
+  box-shadow: 0 0 10px rgba(var(--mwc-tone-rgb), 0.3), inset 0 0 16px rgba(0, 0, 0, 0.55);
+  font-family: "Signika", sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  line-height: 1.38;
+  color: #f3eaff;
+}
+
+.magic-wheel-card,
+.magic-wheel-card * {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.magic-wheel-card.tone-good { --mwc-tone: #3dff9a; --mwc-tone-rgb: 61, 255, 154; }
+.magic-wheel-card.tone-bad { --mwc-tone: #ff3b5c; --mwc-tone-rgb: 255, 59, 92; }
+.magic-wheel-card.tone-weird { --mwc-tone: #c77dff; --mwc-tone-rgb: 199, 125, 255; }
+.magic-wheel-card.tone-chaos { --mwc-tone: #ff9f1a; --mwc-tone-rgb: 255, 159, 26; }
+
+.magic-wheel-card p {
+  margin: 0;
+}
+
+/* "> * + p" outweighs the paragraph reset above, so the card's own paragraphs are spaced like everything else. */
+.magic-wheel-card > * + *,
+.magic-wheel-card > * + p {
+  margin-top: 7px;
+}
+
+.magic-wheel-card a.inline-roll,
+.magic-wheel-card a.content-link {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.magic-wheel-card a.inline-roll i,
+.magic-wheel-card a.content-link i {
+  color: #ffd166;
+}
+
+/* Core's minimal fallback card (used if the full card could not be rendered). */
+.magic-wheel-card.magic-wheel-fallback h3 {
+  margin: 0;
+  border: none;
+  font-family: "Bruno Ace", "Signika", sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255, 45, 247, 0.85);
+}
+
+.magic-wheel-card.magic-wheel-fallback strong {
+  color: var(--mwc-tone);
+}
+
+.magic-wheel-card.magic-wheel-fallback .mw-effect {
+  padding: 5px 8px;
+  border-left: 3px solid var(--mwc-tone);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.magic-wheel-card .mwc-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* A tiny prize wheel. */
+.magic-wheel-card .mwc-badge {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: conic-gradient(#ff2d75 0 45deg, #ffb000 0 90deg, #00c8f0 0 135deg, #7b2ff7 0 180deg,
+    #2ee86a 0 225deg, #ff5a1f 0 270deg, #1f5bff 0 315deg, #f7e300 0);
+  box-shadow: 0 0 0 2px #ffd166, 0 0 10px rgba(255, 45, 247, 0.6);
+}
+
+.magic-wheel-card .mwc-badge::after {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #12031f;
+  box-shadow: 0 0 0 2px #ffd166;
+}
+
+.magic-wheel-card .mwc-titles {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  container-type: inline-size;
+}
+
+.magic-wheel-card .mwc-headline {
+  overflow: hidden;
+  font-family: "Bruno Ace", "Signika", sans-serif;
+  font-size: 11px;
+  /* Scale down with the space left beside the badge and the total, so "WILD MAGIC SURGE" fits the default sidebar.
+     Longer table names still end in an ellipsis. */
+  font-size: clamp(9px, 6.9cqi, 11px);
+  letter-spacing: 0.1em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255, 45, 247, 0.85);
+}
+
+.magic-wheel-card .mwc-sub {
+  overflow: hidden;
+  font-size: 10.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #b9a6d6;
+}
+
+.magic-wheel-card .mwc-total {
+  flex: none;
+  min-width: 34px;
+  padding: 2px 6px;
+  border: 1px solid rgba(var(--mwc-tone-rgb), 0.7);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.45);
+  box-shadow: inset 0 0 8px rgba(var(--mwc-tone-rgb), 0.35);
+  font-family: "Bruno Ace", "Signika", sans-serif;
+  font-size: 15px;
+  line-height: 1.2;
+  text-align: center;
+  color: #fff;
+}
+
+.magic-wheel-card .mwc-result {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid rgba(var(--mwc-tone-rgb), 0.45);
+  border-radius: 7px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.magic-wheel-card .mwc-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1.5px solid var(--mwc-tone);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(var(--mwc-tone-rgb), 0.5);
+  font-size: 14px;
+  color: var(--mwc-tone);
+}
+
+.magic-wheel-card .mwc-label-wrap {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+
+.magic-wheel-card .mwc-range {
+  font-family: "Bruno Ace", "Signika", sans-serif;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  color: #b9a6d6;
+}
+
+.magic-wheel-card .mwc-label {
+  font-family: "Modesto Condensed", "Signika", sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  color: var(--mwc-tone);
+  text-shadow: 0 0 8px rgba(var(--mwc-tone-rgb), 0.7);
+}
+
+.magic-wheel-card .mwc-landed {
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  color: #d9c8f5;
+}
+
+.magic-wheel-card .mwc-landed strong {
+  color: var(--mwc-tone);
+}
+
+.magic-wheel-card .mwc-effect {
+  padding: 5px 8px;
+  border-left: 3px solid var(--mwc-tone);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #efe4ff;
+}
+
+.magic-wheel-card .mwc-effect p + p {
+  margin-top: 0.4em;
+}
+
+.magic-wheel-card .mwc-extra {
+  padding: 5px 8px;
+  border: 1px dashed rgba(34, 230, 255, 0.45);
+  border-radius: 5px;
+  background: rgba(34, 230, 255, 0.08);
+  font-size: 12.5px;
+  color: #dff9ff;
+}
+
+.magic-wheel-card .mwc-extra > i {
+  margin-right: 2px;
+  color: #22e6ff;
+}
+
+.magic-wheel-card .mwc-line {
+  padding: 6px 9px 7px;
+  border: 1px solid rgba(255, 45, 247, 0.45);
+  border-radius: 10px 10px 10px 3px;
+  background: linear-gradient(135deg, rgba(255, 45, 247, 0.16), rgba(123, 47, 247, 0.12));
+  color: #fff;
+}
+
+.magic-wheel-card .mwc-line strong {
+  color: #ffe36e;
+}
+
+.magic-wheel-card .mwc-speaker {
+  display: block;
+  margin-bottom: 2px;
+  font-family: "Bruno Ace", "Signika", sans-serif;
+  font-size: 8.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #ff2df7;
+  text-shadow: 0 0 6px rgba(255, 45, 247, 0.8);
+}
+
+.magic-wheel-card .mwc-aside {
+  font-size: 11.5px;
+  font-style: italic;
+  color: #b9a6d6;
+}
+
+.magic-wheel-card .mwc-aside > i {
+  margin-right: 2px;
+  font-style: normal;
+  color: #ffd166;
+}
+
+.magic-wheel-card .mwc-achievement,
+.magic-wheel-card .mwc-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 7px;
+}
+
+.magic-wheel-card .mwc-achievement {
+  border: 1px solid #ffd166;
+  background: linear-gradient(100deg, #2a1500, #4d2c00 50%, #2a1500);
+  box-shadow: 0 0 8px rgba(255, 209, 102, 0.35);
+  color: #ffe9bf;
+}
+
+.magic-wheel-card .mwc-achievement-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff1b8, #ffb000 55%, #8a4b00);
+  font-size: 14px;
+  color: #4a2400;
+}
+
+.magic-wheel-card .mwc-achievement-body,
+.magic-wheel-card .mwc-box-body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.magic-wheel-card .mwc-achievement-kicker,
+.magic-wheel-card .mwc-box-title {
+  font-family: "Bruno Ace", "Signika", sans-serif;
+  font-size: 8.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.magic-wheel-card .mwc-achievement-kicker {
+  color: #ffd166;
+}
+
+.magic-wheel-card .mwc-achievement-title {
+  font-family: "Modesto Condensed", "Signika", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.magic-wheel-card .mwc-achievement-text {
+  font-size: 11.5px;
+}
+
+.magic-wheel-card .mwc-box {
+  border: 1px solid rgba(var(--tier-rgb), 0.8);
+  background: linear-gradient(135deg, rgba(var(--tier-rgb), 0.2), rgba(0, 0, 0, 0.35));
+}
+
+.magic-wheel-card .mwc-box-icon {
+  flex: none;
+  font-size: 20px;
+  color: var(--tier);
+  filter: drop-shadow(0 0 5px rgba(var(--tier-rgb), 0.8));
+}
+
+.magic-wheel-card .mwc-box-title {
+  color: var(--tier);
+}
+
+.magic-wheel-card .mwc-box-contents {
+  font-size: 12px;
+  color: #fff;
+}
+
+.magic-wheel-card .mwc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.magic-wheel-card .mwc-contestant {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 10.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #b9a6d6;
+}
+
+.magic-wheel-card .mwc-contestant > i {
+  color: #ff2d75;
+}
+
+.magic-wheel-card button[data-action="mw-replay"] {
+  flex: none;
+  width: auto;
+  height: 24px;
+  margin: 0;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 45, 247, 0.75);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255, 45, 247, 0.35), rgba(123, 47, 247, 0.35));
+  box-shadow: 0 0 8px rgba(255, 45, 247, 0.35);
+  font-family: "Bruno Ace", "Signika", sans-serif;
+  font-size: 9.5px;
+  line-height: 22px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+  cursor: pointer;
+}
+
+.magic-wheel-card button[data-action="mw-replay"]:hover,
+.magic-wheel-card button[data-action="mw-replay"]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 14px rgba(255, 45, 247, 0.85);
+}
+
+.magic-wheel-card button[data-action="mw-replay"] > i {
+  margin-right: 3px;
+}

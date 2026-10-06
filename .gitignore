@@ -1,0 +1,13 @@
+# Local tooling
+.claude/
+node_modules/
+
+# Release builds are made by GitHub Actions
+*.zip
+package/
+module.json.tmp
+
+# OS clutter
+.DS_Store
+Thumbs.db
+desktop.ini

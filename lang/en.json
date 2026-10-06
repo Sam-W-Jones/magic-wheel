@@ -1,0 +1,118 @@
+{
+  "MAGICWHEEL": {
+    "Settings": {
+      "tableNames": {
+        "Name": "Wheel tables",
+        "Hint": "Comma-separated names of roll tables (case-insensitive) that spin the wheel when drawn. The table this module creates uses the wheel whatever its name, unless you switch it off; use the Wheel button on a table's sheet to force any table on or off."
+      },
+      "audience": {
+        "Name": "Who sees the wheel",
+        "Hint": "Who gets the wheel window for public rolls. GM, blind and self rolls always limit it to the people allowed to see the result.",
+        "Choices": {
+          "everyone": "Everyone",
+          "roller": "The roller and GMs"
+        }
+      },
+      "spinSeconds": {
+        "Name": "Spin length (seconds)",
+        "Hint": "How long the wheel spins before it lands. Fake-outs add a couple of seconds."
+      },
+      "fakeOuts": {
+        "Name": "Fake-outs",
+        "Hint": "Sometimes the wheel stops, then creeps forward or rolls back a slice. The landing result is never changed."
+      },
+      "commentary": {
+        "Name": "System AI commentary",
+        "Hint": "The System AI's running commentary and lines about the result, achievements, reward boxes, sponsors, audience reactions and surge check jokes. Off: plain wording instead. Notifications, the wild magic window title and the game-show look (LIVE badge, viewers, verdict plate) keep their flavour."
+      },
+      "autoCreateTable": {
+        "Name": "Create the table automatically",
+        "Hint": "On first load, create a Wild Magic Surge roll table if the world has none. It only happens once, so a table you delete stays deleted; use the Create the Wild Magic Surge table button for a fresh one."
+      },
+      "tableCreated": {
+        "Name": "Wild Magic Surge table created",
+        "Hint": "Internal: the table has been created once."
+      },
+      "surgeCheck": {
+        "Name": "Surge check (dnd5e)",
+        "Hint": "After a creature with the surge feature casts a spell of 1st level or higher, roll a d20; on a 1, spin the wheel. Ignored while Wild Magic Surge 5e is active.",
+        "Choices": {
+          "off": "Off",
+          "auto": "Auto: roll a d20 after each spell"
+        }
+      },
+      "surgeFeatureName": {
+        "Name": "Surge feature name",
+        "Hint": "The name of the feature (case-insensitive) that makes a creature check for surges."
+      },
+      "wmsIntegration": {
+        "Name": "Wild Magic Surge 5e integration",
+        "Hint": "Only used when Wild Magic Surge 5e is active. Intercept: cancel that module's table card and spin the wheel for the same result. Hook: when it reports a surge, roll the table named in its Roll Table Name setting (else this module's table) and spin (set its Auto Roll Table option to None). Off: leave that module alone.",
+        "Choices": {
+          "intercept": "Intercept: replace its table card",
+          "hook": "Hook: react to its surge hook",
+          "off": "Off"
+        }
+      },
+      "sound": {
+        "Name": "Sound",
+        "Hint": "Ticks, drumrolls and landing stingers on this device."
+      },
+      "volume": {
+        "Name": "Volume",
+        "Hint": "Volume of the wheel sounds, scaled by the interface volume."
+      },
+      "autoCloseSeconds": {
+        "Name": "Auto-close (seconds)",
+        "Hint": "Close the wheel window this many seconds after it lands. 0 keeps it open until you close it."
+      },
+      "skipWheel": {
+        "Name": "Coward Mode: skip the wheel",
+        "Hint": "Don't open the wheel window on this device when someone rolls (Instant Replay still opens it). Results still arrive in chat, with judgement."
+      },
+      "history": {
+        "Name": "Recent results",
+        "Hint": "Internal: recent results on this device, used for repeat and streak commentary."
+      }
+    },
+    "Menu": {
+      "CreateTable": {
+        "Name": "Wild Magic Surge table",
+        "Label": "Create the Wild Magic Surge table",
+        "Hint": "Create a new world roll table with all 50 Wild Magic Surge results, set up for the wheel and rollable by players.",
+        "ConfirmTitle": "Create the Wild Magic Surge table",
+        "ConfirmContent": "Create a new Wild Magic Surge roll table? Existing tables are not changed."
+      }
+    },
+    "HeaderButton": {
+      "On": "Wheel: On",
+      "Off": "Wheel: Off"
+    },
+    "Card": {
+      "Headline": "WILD MAGIC SURGE",
+      "Replay": "Instant Replay"
+    },
+    "Wheel": {
+      "Close": "Close",
+      "Mute": "Mute the broadcast",
+      "Unmute": "Unmute the broadcast",
+      "DismissToast": "Click to dismiss"
+    },
+    "Check": {
+      "Flavor": "Wild Magic Surge check",
+      "Pass": "Rolled {total}: no surge.",
+      "Fail": "Wild Magic Surge!"
+    },
+    "Notifications": {
+      "NoTable": "No Wild Magic Surge roll table was found.",
+      "TableNotFound": "No roll table matches {name}.",
+      "TableCreated": "Created the Wild Magic Surge roll table.",
+      "CreateFailed": "Could not create the Wild Magic Surge roll table. See the console for details.",
+      "GMOnly": "Only a GM can do that.",
+      "NoReplay": "There is no wheel to replay for that message.",
+      "ReplayHidden": "You are not allowed to see that result.",
+      "DrawnUpdateFailed": "Could not mark the drawn results of {name}. Ask a GM to reset the table if it repeats results.",
+      "ToggleFailed": "Could not change the wheel setting of this table."
+    }
+  }
+}

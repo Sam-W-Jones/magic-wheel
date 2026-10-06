@@ -1,0 +1,129 @@
+# Tests every push and pull request. Pushing a version tag (e.g. v1.0.0) also publishes a Foundry-installable
+# release carrying module.json and module.zip, so Foundry can install from:
+#   https://github.com/<owner>/<repo>/releases/latest/download/module.json
+name: Test and release
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*.*.*"]
+  pull_request:
+  # Lets you build a test zip by hand from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate JSON
+        run: |
+          jq empty module.json package.json lang/*.json
+          echo "Module $(jq -r .id module.json) version $(jq -r .version module.json)"
+
+      - name: Check the manifest id matches the module folder name Foundry expects
+        run: test "$(jq -r .id module.json)" = "magic-wheel"
+
+      - name: Check every file the manifest loads exists
+        shell: bash
+        run: |
+          missing=0
+          for f in $(jq -r '.esmodules[], .styles[], .languages[].path' module.json) \
+                   templates/wheel.hbs templates/chat-card.hbs assets/wheel.svg; do
+            if [[ ! -f "$f" ]]; then
+              echo "::error::Missing file: $f"
+              missing=1
+            fi
+          done
+          exit $missing
+
+      - name: Check every script parses
+        shell: bash
+        run: |
+          # package.json has "type": "module", so Node checks these as ES modules
+          find scripts -name "*.js" -print0 | xargs -0 -n 1 node --check
+
+      # Test-only helper: the sanitizer's DOM cases parse HTML with parse5 (they are skipped when it is missing)
+      - name: Install the HTML parser the sanitizer tests use
+        run: npm install --no-save --no-audit --no-fund parse5@7
+
+      - name: Run unit tests
+        run: npm test
+
+  release:
+    name: Build and publish
+    needs: test
+    if: github.ref_type == 'tag' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Check the tag matches module.json
+        if: github.ref_type == 'tag'
+        shell: bash
+        run: |
+          VERSION="$(jq -r .version module.json)"
+          if [[ "${GITHUB_REF_NAME}" != "v${VERSION}" ]]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match module.json version ${VERSION}. Expected v${VERSION}."
+            exit 1
+          fi
+
+      # The manifest URL always serves the newest release's module.json, which points at that release's zip
+      - name: Point module.json at this release
+        shell: bash
+        run: |
+          REPO="https://github.com/${GITHUB_REPOSITORY}"
+          VERSION="$(jq -r .version module.json)"
+          jq --arg url "${REPO}" \
+             --arg manifest "${REPO}/releases/latest/download/module.json" \
+             --arg download "${REPO}/releases/download/v${VERSION}/module.zip" \
+             '.url = $url | .manifest = $manifest | .download = $download' \
+             module.json > module.json.tmp
+          mv module.json.tmp module.json
+          cat module.json
+
+      # Only what Foundry needs: no tests, package.json or .github in the zip
+      - name: Build module.zip
+        shell: bash
+        run: |
+          zip -r module.zip module.json README.md CHANGELOG.md LICENSE assets lang scripts styles templates \
+            -x "*.DS_Store" "*Thumbs.db" "*desktop.ini"
+          unzip -l module.zip
+
+      - name: Create or update the GitHub release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          if gh release view "${TAG}" --repo "${GITHUB_REPOSITORY}" > /dev/null 2>&1; then
+            echo "Release ${TAG} already exists; replacing its files."
+            gh release upload "${TAG}" module.json module.zip --clobber --repo "${GITHUB_REPOSITORY}"
+          else
+            gh release create "${TAG}" module.json module.zip --repo "${GITHUB_REPOSITORY}" \
+              --title "Wheel of Wild Magic ${TAG}" --generate-notes
+          fi
+
+      - name: Keep the test build
+        if: github.ref_type != 'tag'
+        uses: actions/upload-artifact@v4
+        with:
+          name: magic-wheel-test-build
+          path: |
+            module.json
+            module.zip

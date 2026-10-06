@@ -1,0 +1,146 @@
+<div class="mw-root tone-{{tone}} kind-{{kind}}{{#if replay}} is-replay{{/if}}" data-spin-id="{{spinId}}">
+  <header class="mw-topbar">
+    {{#if replay}}
+    <span class="mw-badge mw-badge-rerun"><i class="fa-solid fa-clock-rotate-left"></i> Rerun</span>
+    {{else}}
+    <span class="mw-badge mw-badge-live"><span class="mw-live-dot"></span> Live</span>
+    {{/if}}
+    <div class="mw-contestant">
+      <span class="mw-kicker" title="{{headline}}">{{headline}}</span>
+      <span class="mw-contestant-name">Contestant: <strong>{{speakerName}}</strong></span>
+    </div>
+    <div class="mw-viewers">
+      <i class="fa-solid fa-eye"></i>
+      <span class="mw-viewer-count">{{viewers}}</span>
+      <span class="mw-viewers-label">watching</span>
+    </div>
+  </header>
+
+  <section class="mw-stage">
+    <div class="mw-backdrop" aria-hidden="true">
+      <div class="mw-rays"></div>
+      <div class="mw-floor"></div>
+    </div>
+
+    <div class="mw-wheel">
+      <div class="mw-wheel-body">
+        <div class="mw-rim-glow"></div>
+        <div class="mw-rim"></div>
+        <div class="mw-bulbs"></div>
+        <div class="mw-disc">
+          <canvas class="mw-canvas"></canvas>
+          <div class="mw-spotlight"></div>
+        </div>
+        <div class="mw-hub">
+          <svg class="mw-eye" viewBox="0 0 100 100" aria-hidden="true">
+            <defs>
+              <radialGradient id="mw-iris-{{uid}}" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#fff7a8"/>
+                <stop offset="28%" stop-color="#ffb000"/>
+                <stop offset="62%" stop-color="#ff2d75"/>
+                <stop offset="100%" stop-color="#5a0030"/>
+              </radialGradient>
+              <radialGradient id="mw-plate-{{uid}}" cx="40%" cy="35%" r="70%">
+                <stop offset="0%" stop-color="#4a1d73"/>
+                <stop offset="70%" stop-color="#16052a"/>
+                <stop offset="100%" stop-color="#07010f"/>
+              </radialGradient>
+              <clipPath id="mw-lid-{{uid}}">
+                <path d="M12 50 Q50 16 88 50 Q50 84 12 50 Z"/>
+              </clipPath>
+            </defs>
+            <circle class="mw-eye-plate" cx="50" cy="50" r="48" fill="url(#mw-plate-{{uid}})"/>
+            <g class="mw-eye-ball">
+              <path class="mw-eye-white" d="M12 50 Q50 16 88 50 Q50 84 12 50 Z"/>
+              <g clip-path="url(#mw-lid-{{uid}})">
+                <g class="mw-eye-look">
+                  <circle class="mw-iris" cx="50" cy="50" r="17" fill="url(#mw-iris-{{uid}})"/>
+                  <ellipse class="mw-pupil" cx="50" cy="50" rx="3.6" ry="12"/>
+                  <circle class="mw-glint" cx="56" cy="43" r="3"/>
+                </g>
+              </g>
+              <path class="mw-eye-outline" d="M12 50 Q50 16 88 50 Q50 84 12 50 Z"/>
+            </g>
+          </svg>
+        </div>
+        <div class="mw-pointer">
+          <svg viewBox="0 0 34 50" aria-hidden="true">
+            <defs>
+              <linearGradient id="mw-pointer-{{uid}}" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#ff7ab0"/>
+                <stop offset="50%" stop-color="#ff1f6b"/>
+                <stop offset="100%" stop-color="#b0003f"/>
+              </linearGradient>
+            </defs>
+            <path class="mw-pointer-body" d="M6 13 L28 13 L17 48 Z" fill="url(#mw-pointer-{{uid}})"/>
+            <path class="mw-pointer-shine" d="M9 15 L17 15 L16.5 40 Z"/>
+            <circle class="mw-pointer-pivot" cx="17" cy="12" r="9"/>
+            <circle class="mw-pointer-gem" cx="17" cy="12" r="4.2"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="mw-dock-stack">
+      <div class="mw-plate">
+        {{#if result.rangeLabel}}<span class="mw-plate-range">{{result.rangeLabel}}</span>{{/if}}
+        <span class="mw-plate-verdict">{{verdict}}</span>
+      </div>
+      <div class="mw-reactions" aria-hidden="true"></div>
+    </div>
+
+    <article class="mw-reveal">
+      <header class="mw-reveal-head">
+        <span class="mw-reveal-icon"><i class="{{result.icon}}"></i></span>
+        <div class="mw-reveal-titles">
+          <span class="mw-reveal-kicker">{{headline}}{{#if result.rangeLabel}} &middot; {{result.rangeLabel}}{{/if}}</span>
+          <h2 class="mw-reveal-label">{{result.label}}</h2>
+        </div>
+      </header>
+      {{#if result.effectHtml}}<div class="mw-effect">{{{result.effectHtml}}}</div>{{/if}}
+      {{#if result.extraHtml}}<div class="mw-extra"><i class="fa-solid fa-dice"></i> {{{result.extraHtml}}}</div>{{/if}}
+      {{#if result.line}}
+      <blockquote class="mw-line">
+        <span class="mw-line-speaker"><i class="fa-solid fa-eye-evil"></i> The System</span>
+        <span class="mw-line-text">{{{result.line}}}</span>
+      </blockquote>
+      {{/if}}
+      {{#if result.repeatLine}}<p class="mw-aside"><i class="fa-solid fa-repeat"></i> {{{result.repeatLine}}}</p>{{/if}}
+      {{#if result.streakLine}}<p class="mw-aside"><i class="fa-solid fa-fire-flame-curved"></i> {{{result.streakLine}}}</p>{{/if}}
+      {{#if result.box}}
+      <div class="mw-box tier-{{result.box.tierClass}}">
+        <span class="mw-box-icon"><i class="fa-solid fa-box-open"></i></span>
+        <div class="mw-box-body">
+          <span class="mw-box-title">{{result.box.tier}} Reward Box!</span>
+          <span class="mw-box-contents">{{{result.box.contents}}}</span>
+        </div>
+      </div>
+      {{/if}}
+    </article>
+  </section>
+
+  <section class="mw-ticker">
+    <span class="mw-ticker-tag"><i class="fa-solid fa-satellite-dish"></i> System</span>
+    <div class="mw-ticker-text" aria-live="polite"></div>
+  </section>
+
+  {{#if result.achievement}}
+  <aside class="mw-toast" data-tooltip="{{localize 'MAGICWHEEL.Wheel.DismissToast'}}">
+    <span class="mw-toast-icon"><i class="fa-solid fa-trophy"></i></span>
+    <div class="mw-toast-body">
+      <span class="mw-toast-kicker">New Achievement!</span>
+      <span class="mw-toast-title">{{{result.achievement.title}}}</span>
+      <span class="mw-toast-text">{{{result.achievement.text}}}</span>
+    </div>
+  </aside>
+  {{/if}}
+
+  <footer class="mw-footer">
+    <div class="mw-sponsor">{{#if sponsor}}<i class="fa-solid fa-ticket"></i> {{{sponsor}}}{{/if}}</div>
+    <button type="button" class="mw-close" data-action="close">
+      <span class="mw-close-label">{{{closeLabel}}}</span><span class="mw-countdown"></span>
+    </button>
+  </footer>
+
+  <div class="mw-fx" aria-hidden="true"></div>
+</div>

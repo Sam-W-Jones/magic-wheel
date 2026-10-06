@@ -1,0 +1,56 @@
+<div class="magic-wheel-card tone-{{tone}} kind-{{kind}}" data-spin-id="{{spinId}}">
+  <header class="mwc-header">
+    <span class="mwc-badge" aria-hidden="true"></span>
+    <div class="mwc-titles">
+      <span class="mwc-headline">{{headline}}</span>
+      <span class="mwc-sub">{{tableName}}{{#if formula}} &middot; {{formula}}{{/if}}</span>
+    </div>
+    {{#if total}}<span class="mwc-total" data-tooltip="{{formula}}">{{total}}</span>{{/if}}
+  </header>
+
+  <div class="mwc-result">
+    <span class="mwc-icon"><i class="{{icon}}"></i></span>
+    <div class="mwc-label-wrap">
+      {{#if rangeLabel}}<span class="mwc-range">{{rangeLabel}}</span>{{/if}}
+      <span class="mwc-label">{{label}}</span>
+    </div>
+  </div>
+
+  {{#if landed}}<p class="mwc-landed">{{{landed}}}</p>{{/if}}
+  {{#if effectHtml}}<div class="mwc-effect">{{{effectHtml}}}</div>{{/if}}
+  {{#if extraHtml}}<div class="mwc-extra"><i class="fa-solid fa-dice"></i> {{{extraHtml}}}</div>{{/if}}
+  {{#if line}}
+  <div class="mwc-line">
+    <span class="mwc-speaker"><i class="fa-solid fa-eye-evil"></i> The System</span>
+    {{{line}}}
+  </div>
+  {{/if}}
+  {{#if repeatLine}}<p class="mwc-aside"><i class="fa-solid fa-repeat"></i> {{{repeatLine}}}</p>{{/if}}
+  {{#if streakLine}}<p class="mwc-aside"><i class="fa-solid fa-fire-flame-curved"></i> {{{streakLine}}}</p>{{/if}}
+
+  {{#if achievement}}
+  <div class="mwc-achievement">
+    <span class="mwc-achievement-icon"><i class="fa-solid fa-trophy"></i></span>
+    <div class="mwc-achievement-body">
+      <span class="mwc-achievement-kicker">New Achievement!</span>
+      <span class="mwc-achievement-title">{{{achievement.title}}}</span>
+      <span class="mwc-achievement-text">{{{achievement.text}}}</span>
+    </div>
+  </div>
+  {{/if}}
+
+  {{#if box}}
+  <div class="mwc-box tier-{{box.tierClass}}">
+    <span class="mwc-box-icon"><i class="fa-solid fa-box-open"></i></span>
+    <div class="mwc-box-body">
+      <span class="mwc-box-title">{{box.tier}} Reward Box</span>
+      <span class="mwc-box-contents">{{{box.contents}}}</span>
+    </div>
+  </div>
+  {{/if}}
+
+  <footer class="mwc-footer">
+    <span class="mwc-contestant"><i class="fa-solid fa-tv-retro"></i> {{{speakerName}}}</span>
+    <button type="button" data-action="mw-replay"><i class="fa-solid fa-clock-rotate-left"></i> {{localize 'MAGICWHEEL.Card.Replay'}}</button>
+  </footer>
+</div>

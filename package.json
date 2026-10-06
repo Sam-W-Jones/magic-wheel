@@ -1,0 +1,12 @@
+{
+  "name": "magic-wheel",
+  "private": true,
+  "description": "Development tooling for the Wheel of Wild Magic Foundry VTT module. Not part of the installed module.",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/run-tests.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

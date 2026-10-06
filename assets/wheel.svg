@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <title>Wheel of Wild Magic</title>
+  <defs>
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff2df7"/>
+      <stop offset="0.5" stop-color="#7b2ff7"/>
+      <stop offset="1" stop-color="#22e6ff"/>
+    </linearGradient>
+    <radialGradient id="shade" cx="128" cy="134" r="98" gradientUnits="userSpaceOnUse">
+      <stop offset="0.2" stop-color="#000" stop-opacity="0.35"/>
+      <stop offset="0.6" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.25"/>
+    </radialGradient>
+    <radialGradient id="iris" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff7a8"/>
+      <stop offset="0.35" stop-color="#ffb000"/>
+      <stop offset="0.75" stop-color="#ff2d75"/>
+      <stop offset="1" stop-color="#5a0030"/>
+    </radialGradient>
+  </defs>
+  <circle cx="128" cy="134" r="118" fill="#ff2df7" opacity="0.25"/>
+  <circle cx="128" cy="134" r="114" fill="url(#rim)" stroke="#10021d" stroke-width="3"/>
+  <circle cx="128" cy="134" r="111" fill="#16052a"/>
+  <g fill="#ffe08a">
+    <circle cx="148.87" cy="29.06" r="3.6"/>
+    <circle cx="187.45" cy="45.03" r="3.6" fill="#b8742a"/>
+    <circle cx="216.97" cy="74.55" r="3.6"/>
+    <circle cx="232.94" cy="113.13" r="3.6" fill="#b8742a"/>
+    <circle cx="232.94" cy="154.87" r="3.6"/>
+    <circle cx="216.97" cy="193.45" r="3.6" fill="#b8742a"/>
+    <circle cx="187.45" cy="222.97" r="3.6"/>
+    <circle cx="148.87" cy="238.94" r="3.6" fill="#b8742a"/>
+    <circle cx="107.13" cy="238.94" r="3.6"/>
+    <circle cx="68.55" cy="222.97" r="3.6" fill="#b8742a"/>
+    <circle cx="39.03" cy="193.45" r="3.6"/>
+    <circle cx="23.06" cy="154.87" r="3.6" fill="#b8742a"/>
+    <circle cx="23.06" cy="113.13" r="3.6"/>
+    <circle cx="39.03" cy="74.55" r="3.6" fill="#b8742a"/>
+    <circle cx="68.55" cy="45.03" r="3.6"/>
+    <circle cx="107.13" cy="29.06" r="3.6" fill="#b8742a"/>
+  </g>
+  <g>
+    <path d="M128 134 L128.00 36.00 A98 98 0 0 1 197.30 64.70 Z" fill="#ff2d75"/>
+    <path d="M128 134 L197.30 64.70 A98 98 0 0 1 226.00 134.00 Z" fill="#ffb000"/>
+    <path d="M128 134 L226.00 134.00 A98 98 0 0 1 197.30 203.30 Z" fill="#00c8f0"/>
+    <path d="M128 134 L197.30 203.30 A98 98 0 0 1 128.00 232.00 Z" fill="#7b2ff7"/>
+    <path d="M128 134 L128.00 232.00 A98 98 0 0 1 58.70 203.30 Z" fill="#2ee86a"/>
+    <path d="M128 134 L58.70 203.30 A98 98 0 0 1 30.00 134.00 Z" fill="#ff5a1f"/>
+    <path d="M128 134 L30.00 134.00 A98 98 0 0 1 58.70 64.70 Z" fill="#1f5bff"/>
+    <path d="M128 134 L58.70 64.70 A98 98 0 0 1 128.00 36.00 Z" fill="#f7e300"/>
+  </g>
+  <circle cx="128" cy="134" r="98" fill="url(#shade)"/>
+  <g stroke="#12021f" stroke-width="3" stroke-linecap="round">
+    <line x1="128.00" y1="110.00" x2="128.00" y2="36.00"/>
+    <line x1="144.97" y1="117.03" x2="197.30" y2="64.70"/>
+    <line x1="152.00" y1="134.00" x2="226.00" y2="134.00"/>
+    <line x1="144.97" y1="150.97" x2="197.30" y2="203.30"/>
+    <line x1="128.00" y1="158.00" x2="128.00" y2="232.00"/>
+    <line x1="111.03" y1="150.97" x2="58.70" y2="203.30"/>
+    <line x1="104.00" y1="134.00" x2="30.00" y2="134.00"/>
+    <line x1="111.03" y1="117.03" x2="58.70" y2="64.70"/>
+  </g>
+  <g fill="#ffd166" stroke="#6b4400" stroke-width="1">
+    <circle cx="128.00" cy="43.00" r="3.2"/>
+    <circle cx="192.35" cy="69.65" r="3.2"/>
+    <circle cx="219.00" cy="134.00" r="3.2"/>
+    <circle cx="192.35" cy="198.35" r="3.2"/>
+    <circle cx="128.00" cy="225.00" r="3.2"/>
+    <circle cx="63.65" cy="198.35" r="3.2"/>
+    <circle cx="37.00" cy="134.00" r="3.2"/>
+    <circle cx="63.65" cy="69.65" r="3.2"/>
+  </g>
+  <circle cx="128" cy="134" r="98" fill="none" stroke="#12021f" stroke-width="3"/>
+  <circle cx="128" cy="134" r="26" fill="#16052a" stroke="#ffd166" stroke-width="4"/>
+  <path d="M110 134 Q128 118 146 134 Q128 150 110 134 Z" fill="#2a0018" stroke="#ff2d75" stroke-width="2.5" stroke-linejoin="round"/>
+  <circle cx="128" cy="134" r="8" fill="url(#iris)"/>
+  <ellipse cx="128" cy="134" rx="1.8" ry="6" fill="#0a0005"/>
+  <path d="M114 12 L142 12 L128 50 Z" fill="#ff1f6b" stroke="#2a0010" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M119 15 L128 15 L127.5 40 Z" fill="#ffffff" opacity="0.45"/>
+  <circle cx="128" cy="13" r="10" fill="#ffd166" stroke="#6b4400" stroke-width="2"/>
+  <circle cx="128" cy="13" r="4.5" fill="#22e6ff"/>
+</svg>
